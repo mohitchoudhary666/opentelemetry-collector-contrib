@@ -201,6 +201,22 @@ Valid mapping modes are:
 
 See below for a description of each mapping mode.
 
+The examples below show how the same nested log attributes are serialized. They
+are excerpts of the emitted document; other fields such as timestamps and
+resource attributes are omitted.
+
+| Mapping mode | Input attributes | Serialized fields |
+| ------------ | --------------- | ----------------- |
+| `none` | `{"o":{"sub_i":19},"s":"baz"}` | `"Attributes.o.sub_i": 19`, `"Attributes.s": "baz"` |
+| `raw` | `{"o":{"sub_i":19},"s":"baz"}` | `"o.sub_i": 19`, `"s": "baz"` |
+| `ecs` | `{"o":{"sub_i":19},"s":"baz"}` | `"o": {"sub_i": 19}`, `"s": "baz"` |
+
+In `none` mode, attribute names are prefixed with `Attributes.`; in `raw`
+mode the prefix is omitted and nested keys are flattened. ECS keeps nested
+attribute objects. The `bodymap` mode instead uses the log record body as the
+document content (see [Bodymap mapping mode](#bodymap-mapping-mode)).
+
+
 #### Migration: Setting mapping mode via scope attribute
 
 Since the `mapping::mode` config option is deprecated, use the following method to set the mapping mode:
